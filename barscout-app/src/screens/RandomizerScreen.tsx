@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import {
-  ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
@@ -13,6 +12,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, typography } from '@/theme';
 import { useRandomCocktail } from '@/hooks/useRandomCocktail';
 import CocktailCard from '@/components/CocktailCard';
+import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
+import ErrorView from '@/components/ErrorView';
 import type { RandomizerStackParamList } from '@/types/navigation';
 
 type Nav = NativeStackNavigationProp<RandomizerStackParamList, 'Randomizer'>;
@@ -29,25 +30,9 @@ export default function RandomizerScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      {loading && (
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={theme.primary} />
-        </View>
-      )}
+      {loading && <CocktailCardSkeleton />}
 
-      {!loading && error && (
-        <View style={styles.centered}>
-          <Text style={[styles.errorText, { color: theme.error }]}>
-            {error.message}
-          </Text>
-          <Pressable
-            style={[styles.button, { backgroundColor: theme.primary }]}
-            onPress={shuffle}
-          >
-            <Text style={styles.buttonText}>Retry</Text>
-          </Pressable>
-        </View>
-      )}
+      {!loading && error && <ErrorView message={error.message} onRetry={shuffle} />}
 
       {!loading && cocktail && (
         <View style={styles.content}>
@@ -71,21 +56,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.md,
-    paddingHorizontal: spacing.md,
-  },
   content: {
     flex: 1,
     justifyContent: 'center',
     gap: spacing.lg,
-  },
-  errorText: {
-    fontSize: typography.size.md,
-    textAlign: 'center',
   },
   button: {
     marginHorizontal: spacing.md,

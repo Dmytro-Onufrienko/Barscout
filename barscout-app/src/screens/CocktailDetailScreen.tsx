@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   Image,
   Pressable,
   ScrollView,
@@ -15,6 +14,8 @@ import { colors, spacing, typography } from '@/theme';
 import { getById } from '@/services/cocktailApi';
 import type { Cocktail } from '@/types/cocktail';
 import type { RandomizerStackParamList } from '@/types/navigation';
+import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
+import ErrorView from '@/components/ErrorView';
 
 type Props = NativeStackScreenProps<RandomizerStackParamList, 'CocktailDetail'>;
 
@@ -49,18 +50,16 @@ export default function CocktailDetailScreen({ route }: Props) {
 
   if (loading) {
     return (
-      <SafeAreaView style={[styles.centered, { backgroundColor: theme.background }]}>
-        <ActivityIndicator size="large" color={theme.primary} />
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <CocktailCardSkeleton />
       </SafeAreaView>
     );
   }
 
   if (error || !cocktail) {
     return (
-      <SafeAreaView style={[styles.centered, { backgroundColor: theme.background }]}>
-        <Text style={[styles.errorText, { color: theme.error }]}>
-          {error?.message ?? 'Cocktail not found'}
-        </Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <ErrorView message={error?.message ?? 'Cocktail not found'} />
       </SafeAreaView>
     );
   }
@@ -124,11 +123,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centered: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   hero: {
     width: '100%',
     height: 300,
@@ -190,10 +184,5 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: typography.size.md,
     fontWeight: typography.weight.medium,
-  },
-  errorText: {
-    fontSize: typography.size.md,
-    textAlign: 'center',
-    paddingHorizontal: spacing.md,
   },
 });
