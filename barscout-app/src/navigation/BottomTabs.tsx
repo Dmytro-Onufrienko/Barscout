@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/theme';
-import RandomizerScreen from '@/screens/RandomizerScreen';
+import RandomizerStack from '@/navigation/RandomizerStack';
 import BarFinderScreen from '@/screens/BarFinderScreen';
 import JournalScreen from '@/screens/JournalScreen';
 import type { RootTabParamList } from '@/types/navigation';
@@ -24,7 +24,7 @@ export default function BottomTabs() {
     >
       <Tab.Screen
         name="RandomizerTab"
-        component={RandomizerScreen}
+        component={RandomizerStack}
         options={{
           title: 'Randomizer',
           tabBarIcon: ({ color, size }) => (
