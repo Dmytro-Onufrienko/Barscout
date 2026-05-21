@@ -14,6 +14,7 @@ import { useLocation } from '@/hooks/useLocation';
 import { getNearbyBars } from '@/services/overpassApi';
 import BarListItem from '@/components/BarListItem';
 import ErrorView from '@/components/ErrorView';
+import { openInMaps } from '@/utils/mapLinking';
 import type { Bar } from '@/types/bar';
 
 const RADIUS_OPTIONS = [500, 1000, 2000, 5000] as const;
@@ -157,7 +158,10 @@ export default function BarFinderScreen() {
         data={bars}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <BarListItem bar={item} onPress={() => {}} />
+          <BarListItem
+            bar={item}
+            onPress={() => openInMaps(item.lat, item.lon, item.name)}
+          />
         )}
         initialNumToRender={10}
         windowSize={5}
