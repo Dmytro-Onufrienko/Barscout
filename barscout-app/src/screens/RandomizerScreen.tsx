@@ -7,13 +7,14 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, spacing, typography } from '@/theme';
 import { useRandomCocktail } from '@/hooks/useRandomCocktail';
 import CocktailCard from '@/components/CocktailCard';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
 import ErrorView from '@/components/ErrorView';
+import { useShakeDetector } from '@/hooks/useShakeDetector';
 import type { RandomizerStackParamList } from '@/types/navigation';
 
 type Nav = NativeStackNavigationProp<RandomizerStackParamList, 'Randomizer'>;
@@ -22,7 +23,10 @@ export default function RandomizerScreen() {
   const scheme = useColorScheme() ?? 'light';
   const theme = colors[scheme];
   const navigation = useNavigation<Nav>();
+  const isFocused = useIsFocused();
   const { cocktail, loading, error, shuffle } = useRandomCocktail();
+
+  useShakeDetector(shuffle, isFocused);
 
   useEffect(() => {
     shuffle();
