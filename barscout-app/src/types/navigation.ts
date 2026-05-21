@@ -8,3 +8,9 @@ export type RandomizerStackParamList = {
   Randomizer: undefined;
   CocktailDetail: { cocktailId: string };
 };
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootTabParamList {}
+  }
+}
