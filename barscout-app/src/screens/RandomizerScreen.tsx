@@ -15,6 +15,7 @@ import CocktailCard from '@/components/CocktailCard';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
 import ErrorView from '@/components/ErrorView';
 import { useShakeDetector } from '@/hooks/useShakeDetector';
+import { useHaptics } from '@/hooks/useHaptics';
 import type { RandomizerStackParamList } from '@/types/navigation';
 
 type Nav = NativeStackNavigationProp<RandomizerStackParamList, 'Randomizer'>;
@@ -25,12 +26,21 @@ export default function RandomizerScreen() {
   const navigation = useNavigation<Nav>();
   const isFocused = useIsFocused();
   const { cocktail, loading, error, shuffle } = useRandomCocktail();
+  const haptics = useHaptics();
 
   useShakeDetector(shuffle, isFocused);
 
   useEffect(() => {
     shuffle();
   }, []);
+
+  useEffect(() => {
+    if (!loading && cocktail) haptics.success();
+  }, [cocktail]);
+
+  useEffect(() => {
+    if (!loading && error) haptics.error();
+  }, [error]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -42,7 +52,10 @@ export default function RandomizerScreen() {
         <View style={styles.content}>
           <CocktailCard
             cocktail={cocktail}
-            onPress={() => navigation.navigate('CocktailDetail', { cocktailId: cocktail.id })}
+            onPress={() => {
+              haptics.light();
+              navigation.navigate('CocktailDetail', { cocktailId: cocktail.id });
+            }}
           />
           <Pressable
             style={[styles.button, { backgroundColor: theme.primary }]}
