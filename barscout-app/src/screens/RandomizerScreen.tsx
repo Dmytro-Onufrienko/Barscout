@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
+  Animated,
   Pressable,
   StyleSheet,
   Text,
@@ -27,6 +28,7 @@ export default function RandomizerScreen() {
   const isFocused = useIsFocused();
   const { cocktail, loading, error, shuffle } = useRandomCocktail();
   const haptics = useHaptics();
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   useShakeDetector(shuffle, isFocused);
 
@@ -35,7 +37,16 @@ export default function RandomizerScreen() {
   }, []);
 
   useEffect(() => {
-    if (!loading && cocktail) haptics.success();
+    if (!loading && cocktail) {
+      haptics.success();
+      scaleAnim.setValue(0.92);
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 120,
+        friction: 7,
+      }).start();
+    }
   }, [cocktail]);
 
   useEffect(() => {
@@ -50,13 +61,15 @@ export default function RandomizerScreen() {
 
       {!loading && cocktail && (
         <View style={styles.content}>
-          <CocktailCard
-            cocktail={cocktail}
-            onPress={() => {
-              haptics.light();
-              navigation.navigate('CocktailDetail', { cocktailId: cocktail.id });
-            }}
-          />
+          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+            <CocktailCard
+              cocktail={cocktail}
+              onPress={() => {
+                haptics.light();
+                navigation.navigate('CocktailDetail', { cocktailId: cocktail.id });
+              }}
+            />
+          </Animated.View>
           <Pressable
             style={[styles.button, { backgroundColor: theme.primary }]}
             onPress={shuffle}
