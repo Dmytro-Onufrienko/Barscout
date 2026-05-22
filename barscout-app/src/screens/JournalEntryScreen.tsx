@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +15,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, typography } from '@/theme';
+import { useJournal } from '@/contexts/JournalContext';
+import { savePhotoPermanently } from '@/services/photoStorage';
 import type { JournalStackParamList } from '@/types/navigation';
 
 type Props = NativeStackScreenProps<JournalStackParamList, 'JournalEntry'>;
@@ -41,25 +44,33 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
   const scheme = useColorScheme() ?? 'light';
   const theme = colors[scheme];
 
+  const { saveEntry } = useJournal();
   const [cocktailName, setCocktailName] = useState(route.params.cocktailName ?? '');
   const [notes, setNotes] = useState('');
   const [rating, setRating] = useState(0);
   const [photoUri, setPhotoUri] = useState(route.params.photoUri);
+  const [saving, setSaving] = useState(false);
 
   const isValid = cocktailName.trim().length > 0 && rating > 0;
 
-  const handleSave = () => {
-    const entry = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      cocktailId: route.params.cocktailId,
-      cocktailName: cocktailName.trim(),
-      photoUri,
-      rating,
-      notes,
-      createdAt: new Date().toISOString(),
-    };
-    console.log('Journal entry:', entry);
-    navigation.popToTop();
+  const handleSave = async () => {
+    if (!isValid || saving) return;
+    setSaving(true);
+    try {
+      const permanentUri = photoUri ? await savePhotoPermanently(photoUri) : undefined;
+      await saveEntry({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        cocktailId: route.params.cocktailId,
+        cocktailName: cocktailName.trim(),
+        photoUri: permanentUri,
+        rating,
+        notes,
+        createdAt: new Date().toISOString(),
+      });
+      navigation.popToTop();
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -146,11 +157,15 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
               { backgroundColor: isValid ? theme.primary : theme.surface },
             ]}
             onPress={handleSave}
-            disabled={!isValid}
+            disabled={!isValid || saving}
           >
-            <Text style={[styles.saveText, { color: isValid ? '#fff' : theme.textMuted }]}>
-              Зберегти
-            </Text>
+            {saving ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={[styles.saveText, { color: isValid ? '#fff' : theme.textMuted }]}>
+                Зберегти
+              </Text>
+            )}
           </Pressable>
         </View>
       </KeyboardAvoidingView>
