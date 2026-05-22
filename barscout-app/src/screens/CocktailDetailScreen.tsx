@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Image,
   Pressable,
@@ -16,17 +16,39 @@ import type { Cocktail } from '@/types/cocktail';
 import type { RandomizerStackParamList } from '@/types/navigation';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
 import ErrorView from '@/components/ErrorView';
+import { useFavorites } from '@/contexts/FavoritesContext';
+import { useHaptics } from '@/hooks/useHaptics';
 
 type Props = NativeStackScreenProps<RandomizerStackParamList, 'CocktailDetail'>;
 
-export default function CocktailDetailScreen({ route }: Props) {
+export default function CocktailDetailScreen({ route, navigation }: Props) {
   const { cocktailId } = route.params;
   const scheme = useColorScheme() ?? 'light';
   const theme = colors[scheme];
 
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const haptics = useHaptics();
   const [cocktail, setCocktail] = useState<Cocktail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+
+  const fav = isFavorite(cocktailId);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          hitSlop={12}
+          onPress={async () => {
+            await toggleFavorite(cocktailId);
+            haptics.light();
+          }}
+        >
+          <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
+        </Pressable>
+      ),
+    });
+  }, [fav, cocktailId]);
 
   useEffect(() => {
     let cancelled = false;
