@@ -5,12 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { getById } from '@/services/cocktailApi';
 import type { Cocktail } from '@/types/cocktail';
 import type { RandomizerStackParamList } from '@/types/navigation';
@@ -23,8 +22,7 @@ type Props = NativeStackScreenProps<RandomizerStackParamList, 'CocktailDetail'>;
 
 export default function CocktailDetailScreen({ route, navigation }: Props) {
   const { cocktailId } = route.params;
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+  const { theme } = useTheme();
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const haptics = useHaptics();

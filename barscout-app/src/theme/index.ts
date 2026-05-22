@@ -6,3 +6,6 @@ export type { Spacing } from './spacing';
 
 export { typography } from './typography';
 export type { Typography } from './typography';
+
+export { ThemeProvider, useTheme } from './ThemeContext';
+export type { ColorMode } from './ThemeContext';

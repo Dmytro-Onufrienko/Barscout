@@ -1,18 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
 import RootNavigator from '@/navigation/RootNavigator';
+import { ThemeProvider, useTheme } from '@/theme';
 import { JournalProvider } from '@/contexts/JournalContext';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
 
-export default function App() {
-  const scheme = useColorScheme();
-
+function AppContent() {
+  const { scheme } = useTheme();
   return (
-    <JournalProvider>
-      <FavoritesProvider>
-        <RootNavigator />
-        <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-      </FavoritesProvider>
-    </JournalProvider>
+    <>
+      <RootNavigator />
+      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <JournalProvider>
+        <FavoritesProvider>
+          <AppContent />
+        </FavoritesProvider>
+      </JournalProvider>
+    </ThemeProvider>
   );
 }
