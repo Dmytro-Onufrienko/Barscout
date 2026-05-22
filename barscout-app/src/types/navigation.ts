@@ -13,6 +13,7 @@ export type JournalStackParamList = {
   Journal: undefined;
   Camera: undefined;
   JournalEntry: { photoUri?: string; cocktailId?: string; cocktailName?: string };
+  JournalDetail: { entryId: string };
 };
 
 declare global {

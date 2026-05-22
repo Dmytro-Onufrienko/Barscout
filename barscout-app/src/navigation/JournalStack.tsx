@@ -4,6 +4,7 @@ import { colors } from '@/theme';
 import JournalScreen from '@/screens/JournalScreen';
 import CameraScreen from '@/screens/CameraScreen';
 import JournalEntryScreen from '@/screens/JournalEntryScreen';
+import JournalDetailScreen from '@/screens/JournalDetailScreen';
 import type { JournalStackParamList } from '@/types/navigation';
 
 const Stack = createNativeStackNavigator<JournalStackParamList>();
@@ -34,6 +35,11 @@ export default function JournalStack() {
         name="JournalEntry"
         component={JournalEntryScreen}
         options={{ title: 'New Entry' }}
+      />
+      <Stack.Screen
+        name="JournalDetail"
+        component={JournalDetailScreen}
+        options={{ title: 'Entry' }}
       />
     </Stack.Navigator>
   );

@@ -1,38 +1,104 @@
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '@/theme';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { colors, spacing, typography } from '@/theme';
+import { useJournal } from '@/contexts/JournalContext';
+import JournalListItem from '@/components/JournalListItem';
+import type { JournalStackParamList } from '@/types/navigation';
 
-export default function JournalScreen() {
+type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
+
+export default function JournalScreen({ navigation }: Props) {
   const scheme = useColorScheme() ?? 'light';
   const theme = colors[scheme];
+  const { entries, loading, refresh } = useJournal();
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+        <ActivityIndicator size="large" color={theme.primary} style={styles.loader} />
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.content}>
-        <Text style={[styles.title, { color: theme.text }]}>Journal</Text>
-        <Text style={[styles.subtitle, { color: theme.textMuted }]}>
-          Your tasting notes will appear here
-        </Text>
-      </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['bottom']}>
+      <FlatList
+        data={entries}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <JournalListItem
+            entry={item}
+            onPress={() => navigation.navigate('JournalDetail', { entryId: item.id })}
+          />
+        )}
+        refreshing={false}
+        onRefresh={refresh}
+        contentContainerStyle={[
+          styles.list,
+          entries.length === 0 && styles.emptyContainer,
+        ]}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={styles.emptyEmoji}>📔</Text>
+            <Text style={[styles.emptyText, { color: theme.textMuted }]}>
+              Поки що пусто.{'\n'}Додай перший коктейль!
+            </Text>
+          </View>
+        }
+      />
+
+      <Pressable
+        style={[styles.fab, { backgroundColor: theme.primary }]}
+        onPress={() => navigation.navigate('JournalEntry', {})}
+      >
+        <Text style={styles.fabText}>+</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: { flex: 1 },
+  loader: { flex: 1 },
+  list: {
+    paddingTop: spacing.sm,
+    paddingBottom: 100,
+  },
+  emptyContainer: {
     flex: 1,
   },
-  content: {
+  empty: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing.md,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
+  emptyEmoji: { fontSize: 56 },
+  emptyText: {
+    fontSize: typography.size.md,
+    textAlign: 'center',
+    lineHeight: typography.size.md * 1.6,
   },
-  subtitle: {
-    fontSize: 15,
-    marginTop: 8,
+  fab: {
+    position: 'absolute',
+    bottom: spacing.xl,
+    right: spacing.lg,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  fabText: {
+    color: '#fff',
+    fontSize: 28,
+    lineHeight: 32,
+    fontWeight: typography.weight.regular,
   },
 });
