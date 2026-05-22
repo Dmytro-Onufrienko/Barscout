@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/theme';
 import RandomizerStack from '@/navigation/RandomizerStack';
 import BarFinderScreen from '@/screens/BarFinderScreen';
-import JournalScreen from '@/screens/JournalScreen';
+import JournalStack from '@/navigation/JournalStack';
 import type { RootTabParamList } from '@/types/navigation';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -44,7 +44,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen
         name="JournalTab"
-        component={JournalScreen}
+        component={JournalStack}
         options={{
           title: 'Journal',
           tabBarIcon: ({ color, size }) => (
