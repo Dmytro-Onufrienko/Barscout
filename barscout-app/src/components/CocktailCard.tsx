@@ -1,5 +1,5 @@
-import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { colors, spacing, typography } from '@/theme';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { spacing, typography, useTheme } from '@/theme';
 import type { Cocktail } from '@/types/cocktail';
 
 type Props = {
@@ -8,8 +8,8 @@ type Props = {
 };
 
 export default function CocktailCard({ cocktail, onPress }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
 
   return (
     <Pressable

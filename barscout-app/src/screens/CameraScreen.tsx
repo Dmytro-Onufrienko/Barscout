@@ -1,17 +1,17 @@
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView } from 'expo-camera';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { useCameraPermission } from '@/hooks/useCameraPermission';
 import type { JournalStackParamList } from '@/types/navigation';
 
 type Props = NativeStackScreenProps<JournalStackParamList, 'Camera'>;
 
 export default function CameraScreen({ navigation }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
   const cameraRef = useRef<CameraView>(null);
   const [facing, setFacing] = useState<'front' | 'back'>('back');
   const [capturing, setCapturing] = useState(false);

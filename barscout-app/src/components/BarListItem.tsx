@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import type { Bar } from '@/types/bar';
 
 type Props = {
@@ -14,8 +14,8 @@ function formatDistance(meters: number): string {
 }
 
 export default function BarListItem({ bar, onPress }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
 
   return (
     <Pressable

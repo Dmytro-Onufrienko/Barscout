@@ -1,5 +1,5 @@
-import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { colors, spacing, typography } from '@/theme';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { spacing, typography, useTheme } from '@/theme';
 import type { JournalEntry } from '@/types/journalEntry';
 
 type Props = {
@@ -24,8 +24,8 @@ function formatDate(iso: string): string {
 }
 
 export default function JournalListItem({ entry, onPress }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
 
   return (
     <Pressable

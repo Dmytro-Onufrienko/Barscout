@@ -1,7 +1,7 @@
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import type { JournalStackParamList } from '@/types/navigation';
 
@@ -26,8 +26,8 @@ function formatDate(iso: string): string {
 }
 
 export default function JournalDetailScreen({ route, navigation }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
   const { entries, deleteEntry } = useJournal();
 
   const entry = entries.find((e) => e.id === route.params.entryId);

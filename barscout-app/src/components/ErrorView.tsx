@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { colors, spacing, typography } from '@/theme';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { spacing, typography, useTheme } from '@/theme';
 
 type Props = {
   message?: string;
@@ -7,8 +7,8 @@ type Props = {
 };
 
 export default function ErrorView({ message = 'Something went wrong', onRetry }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
 
   return (
     <View style={styles.container}>

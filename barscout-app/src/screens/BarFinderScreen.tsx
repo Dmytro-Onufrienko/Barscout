@@ -5,11 +5,10 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { useLocation } from '@/hooks/useLocation';
 import { getNearbyBars } from '@/services/overpassApi';
 import BarListItem from '@/components/BarListItem';
@@ -25,8 +24,8 @@ function formatRadius(r: Radius): string {
 }
 
 export default function BarFinderScreen() {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
   const { state, requestLocation, openSettings } = useLocation();
 
   const [bars, setBars] = useState<Bar[]>([]);

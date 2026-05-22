@@ -1,7 +1,7 @@
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import JournalListItem from '@/components/JournalListItem';
 import type { JournalStackParamList } from '@/types/navigation';
@@ -9,8 +9,8 @@ import type { JournalStackParamList } from '@/types/navigation';
 type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
 
 export default function JournalScreen({ navigation }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
   const { entries, loading, refresh } = useJournal();
 
   if (loading) {

@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, useColorScheme, View } from 'react-native';
-import { colors, spacing } from '@/theme';
+import { Animated, StyleSheet, View } from 'react-native';
+import { spacing, useTheme } from '@/theme';
 
 export default function CocktailCardSkeleton() {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+  const { theme, scheme } = useTheme();
   const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {

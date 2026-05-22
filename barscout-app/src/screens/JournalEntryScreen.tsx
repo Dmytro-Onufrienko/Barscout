@@ -9,12 +9,11 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  useColorScheme,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, typography } from '@/theme';
+import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import { savePhotoPermanently } from '@/services/photoStorage';
 import type { JournalStackParamList } from '@/types/navigation';
@@ -41,8 +40,8 @@ const starStyles = StyleSheet.create({
 });
 
 export default function JournalEntryScreen({ route, navigation }: Props) {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+
+  const { theme, scheme } = useTheme();
 
   const { saveEntry } = useJournal();
   const [cocktailName, setCocktailName] = useState(route.params.cocktailName ?? '');
