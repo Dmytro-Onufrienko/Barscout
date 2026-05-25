@@ -37,19 +37,21 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Pressable
-          hitSlop={12}
-          onPress={async () => {
-            await toggleFavorite(cocktailId);
-            haptics.light();
-          }}
-        >
-          <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
-        </Pressable>
-      ),
+      headerRight: cocktail
+        ? () => (
+            <Pressable
+              hitSlop={12}
+              onPress={async () => {
+                await toggleFavorite({ id: cocktail.id, name: cocktail.name, thumbnail: cocktail.thumbnail });
+                haptics.light();
+              }}
+            >
+              <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
+            </Pressable>
+          )
+        : undefined,
     });
-  }, [fav, cocktailId]);
+  }, [fav, cocktail]);
 
   useEffect(() => {
     let cancelled = false;

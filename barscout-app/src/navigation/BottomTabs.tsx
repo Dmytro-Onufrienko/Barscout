@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/theme';
 import RandomizerStack from '@/navigation/RandomizerStack';
 import BarFinderScreen from '@/screens/BarFinderScreen';
+import FavoritesScreen from '@/screens/FavoritesScreen';
 import JournalStack from '@/navigation/JournalStack';
 import SettingsScreen from '@/screens/SettingsScreen';
 import type { RootTabParamList } from '@/types/navigation';
@@ -38,6 +39,20 @@ export default function BottomTabs() {
           title: 'Bar Finder',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="navigate-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="FavoritesTab"
+        component={FavoritesScreen}
+        options={{
+          title: 'Favorites',
+          headerShown: true,
+          headerTitle: 'Улюблені',
+          headerStyle: { backgroundColor: theme.background },
+          headerTitleStyle: { color: theme.text },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart-outline" color={color} size={size} />
           ),
         }}
       />

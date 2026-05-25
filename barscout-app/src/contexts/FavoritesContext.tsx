@@ -1,30 +1,31 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { favoritesStorage } from '@/storage/favoritesStorage';
+import type { FavoriteItem } from '@/types/favorite';
 
 type FavoritesContextValue = {
-  favorites: string[];
+  favorites: FavoriteItem[];
   isFavorite: (id: string) => boolean;
-  toggleFavorite: (id: string) => Promise<void>;
+  toggleFavorite: (item: FavoriteItem) => Promise<void>;
 };
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
 
   useEffect(() => {
     favoritesStorage.getAll().then(setFavorites);
   }, []);
 
   const isFavorite = useCallback(
-    (id: string) => favorites.includes(id),
+    (id: string) => favorites.some((f) => f.id === id),
     [favorites],
   );
 
-  const toggleFavorite = useCallback(async (id: string) => {
-    const isNowFav = await favoritesStorage.toggle(id);
+  const toggleFavorite = useCallback(async (item: FavoriteItem) => {
+    const isNowFav = await favoritesStorage.toggle(item);
     setFavorites((prev) =>
-      isNowFav ? [id, ...prev] : prev.filter((i) => i !== id),
+      isNowFav ? [item, ...prev] : prev.filter((f) => f.id !== item.id),
     );
   }, []);
 

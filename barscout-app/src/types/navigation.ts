@@ -1,8 +1,9 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
 export type RootTabParamList = {
-  RandomizerTab: undefined;
+  RandomizerTab: NavigatorScreenParams<RandomizerStackParamList> | undefined;
   BarFinderTab: undefined;
+  FavoritesTab: undefined;
   JournalTab: NavigatorScreenParams<JournalStackParamList> | undefined;
   SettingsTab: undefined;
 };
