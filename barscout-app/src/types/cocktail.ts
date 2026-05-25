@@ -18,6 +18,7 @@ export type Cocktail = {
   instructions: string;
   thumbnail: string;
   ingredients: Ingredient[];
+  video?: string;
 };
 
 export type RawCocktail = {
@@ -51,5 +52,6 @@ export function rawToCocktail(raw: RawCocktail): Cocktail {
     instructions: raw.strInstructions ?? '',
     thumbnail: raw.strDrinkThumb ?? '',
     ingredients,
+    video: raw.strVideo ?? undefined,
   };
 }

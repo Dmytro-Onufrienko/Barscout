@@ -53,6 +53,13 @@ export async function getById(id: string): Promise<Cocktail> {
   return results[0];
 }
 
+export async function getRandomFromCategory(category: string): Promise<Cocktail> {
+  const previews = await filterByCategory(category);
+  if (previews.length === 0) throw new CocktailApiError(`No cocktails in category: ${category}`);
+  const pick = previews[Math.floor(Math.random() * previews.length)];
+  return getById(pick.id);
+}
+
 export async function searchByIngredient(ingredient: string): Promise<CocktailPreview[]> {
   const response = await fetch(`${BASE_URL}/filter.php?i=${encodeURIComponent(ingredient)}`);
   if (!response.ok) throw new CocktailApiError('Failed to search by ingredient', response.status);

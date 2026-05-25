@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@/theme';
 import RandomizerScreen from '@/screens/RandomizerScreen';
 import SearchScreen from '@/screens/SearchScreen';
@@ -24,19 +23,7 @@ export default function RandomizerStack() {
       <Stack.Screen
         name="Randomizer"
         component={RandomizerScreen}
-        options={({ navigation }) => ({
-          title: 'Randomizer',
-          headerRight: () => (
-            <View style={styles.headerButtons}>
-              <Pressable hitSlop={12} onPress={() => navigation.navigate('Browse')}>
-                <Text style={{ fontSize: 20 }}>🗂️</Text>
-              </Pressable>
-              <Pressable hitSlop={12} onPress={() => navigation.navigate('Search')}>
-                <Text style={{ fontSize: 20 }}>🔍</Text>
-              </Pressable>
-            </View>
-          ),
-        })}
+        options={{ title: 'Randomizer' }}
       />
       <Stack.Screen
         name="Search"
@@ -62,9 +49,3 @@ export default function RandomizerStack() {
   );
 }
 
-const styles = StyleSheet.create({
-  headerButtons: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-});

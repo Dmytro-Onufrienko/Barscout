@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   Pressable,
@@ -15,6 +15,7 @@ import { useCocktailOfTheDay } from '@/hooks/useCocktailOfTheDay';
 import CocktailCard from '@/components/CocktailCard';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
 import CotdBanner from '@/components/CotdBanner';
+import CategoryFilterModal from '@/components/CategoryFilterModal';
 import ErrorView from '@/components/ErrorView';
 import { useShakeDetector } from '@/hooks/useShakeDetector';
 import { useHaptics } from '@/hooks/useHaptics';
@@ -26,12 +27,31 @@ export default function RandomizerScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation<Nav>();
   const isFocused = useIsFocused();
-  const { cocktail, loading, error, shuffle } = useRandomCocktail();
+  const { cocktail, loading, error, shuffle, category, applyCategory } = useRandomCocktail();
   const { cocktail: cotd } = useCocktailOfTheDay();
   const haptics = useHaptics();
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const [filterVisible, setFilterVisible] = useState(false);
 
   useShakeDetector(shuffle, isFocused);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.headerButtons}>
+          <Pressable hitSlop={12} onPress={() => setFilterVisible(true)}>
+            <Text style={{ fontSize: 20 }}>🎯</Text>
+          </Pressable>
+          <Pressable hitSlop={12} onPress={() => navigation.navigate('Browse')}>
+            <Text style={{ fontSize: 20 }}>🗂️</Text>
+          </Pressable>
+          <Pressable hitSlop={12} onPress={() => navigation.navigate('Search')}>
+            <Text style={{ fontSize: 20 }}>🔍</Text>
+          </Pressable>
+        </View>
+      ),
+    });
+  }, [navigation, setFilterVisible]);
 
   useEffect(() => {
     shuffle();
@@ -68,6 +88,15 @@ export default function RandomizerScreen() {
         </View>
       )}
 
+      {category && (
+        <Pressable
+          style={[styles.filterChip, { backgroundColor: theme.primary }]}
+          onPress={() => setFilterVisible(true)}
+        >
+          <Text style={styles.filterChipText}>🎯 {category} ✕</Text>
+        </Pressable>
+      )}
+
       {loading && <CocktailCardSkeleton />}
 
       {!loading && error && <ErrorView message={error.message} onRetry={shuffle} />}
@@ -85,12 +114,19 @@ export default function RandomizerScreen() {
           </Animated.View>
           <Pressable
             style={[styles.button, { backgroundColor: theme.primary }]}
-            onPress={shuffle}
+            onPress={() => shuffle()}
           >
             <Text style={styles.buttonText}>🎲 Shuffle Again</Text>
           </Pressable>
         </View>
       )}
+
+      <CategoryFilterModal
+        visible={filterVisible}
+        selected={category}
+        onSelect={applyCategory}
+        onClose={() => setFilterVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -117,5 +153,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: typography.size.md,
     fontWeight: typography.weight.semibold,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 14,
+    alignItems: 'center',
+  },
+  filterChip: {
+    alignSelf: 'center',
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: 20,
+  },
+  filterChipText: {
+    color: '#fff',
+    fontSize: typography.size.sm,
+    fontWeight: '600',
   },
 });

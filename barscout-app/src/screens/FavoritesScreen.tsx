@@ -1,4 +1,5 @@
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -13,6 +14,12 @@ export default function FavoritesScreen() {
   const { favorites, toggleFavorite } = useFavorites();
   const haptics = useHaptics();
   const tabNav = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
+  const [query, setQuery] = useState('');
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return q ? favorites.filter((f) => f.name.toLowerCase().includes(q)) : favorites;
+  }, [favorites, query]);
 
   const handlePress = (item: FavoriteItem) => {
     haptics.light();
@@ -24,12 +31,28 @@ export default function FavoritesScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['bottom']}>
+      {favorites.length > 0 && (
+        <View style={[styles.searchBar, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+          <Text style={[styles.searchIcon, { color: theme.textMuted }]}>🔍</Text>
+          <TextInput
+            style={[styles.input, { color: theme.text }]}
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Пошук…"
+            placeholderTextColor={theme.textMuted}
+            clearButtonMode="while-editing"
+            returnKeyType="search"
+          />
+        </View>
+      )}
+
       <FlatList
-        data={favorites}
+        data={filtered}
         keyExtractor={(item) => item.id}
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={[
           styles.list,
-          favorites.length === 0 && styles.emptyContainer,
+          filtered.length === 0 && styles.emptyContainer,
         ]}
         renderItem={({ item }) => (
           <Pressable
@@ -53,10 +76,21 @@ export default function FavoritesScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>🤍</Text>
-            <Text style={[styles.emptyText, { color: theme.textMuted }]}>
-              Поки що пусто.{'\n'}Додай улюблені коктейлі!
-            </Text>
+            {favorites.length === 0 ? (
+              <>
+                <Text style={styles.emptyEmoji}>🤍</Text>
+                <Text style={[styles.emptyText, { color: theme.textMuted }]}>
+                  Поки що пусто.{'\n'}Додай улюблені коктейлі!
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.emptyEmoji}>🔍</Text>
+                <Text style={[styles.emptyText, { color: theme.textMuted }]}>
+                  Нічого не знайдено для "{query}"
+                </Text>
+              </>
+            )}
           </View>
         }
       />
@@ -66,6 +100,22 @@ export default function FavoritesScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: spacing.md,
+    marginBottom: spacing.sm,
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: spacing.sm,
+    gap: spacing.xs,
+  },
+  searchIcon: { fontSize: 16 },
+  input: {
+    flex: 1,
+    paddingVertical: spacing.sm + 2,
+    fontSize: typography.size.md,
+  },
   list: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,

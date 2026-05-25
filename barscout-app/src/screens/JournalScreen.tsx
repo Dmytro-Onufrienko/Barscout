@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -9,10 +10,27 @@ import type { JournalStackParamList } from '@/types/navigation';
 
 type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
 
-export default function JournalScreen({ navigation }: Props) {
+type SortKey = 'newest' | 'oldest' | 'rating';
 
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: 'newest', label: '🕐 Newest' },
+  { key: 'oldest', label: '🕑 Oldest' },
+  { key: 'rating', label: '⭐ Best' },
+];
+
+function sortEntries(entries: JournalEntry[], sort: SortKey): JournalEntry[] {
+  const copy = [...entries];
+  if (sort === 'newest') return copy.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  if (sort === 'oldest') return copy.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  return copy.sort((a, b) => b.rating - a.rating);
+}
+
+export default function JournalScreen({ navigation }: Props) {
   const { theme } = useTheme();
   const { entries, loading, refresh } = useJournal();
+  const [sort, setSort] = useState<SortKey>('newest');
+
+  const sorted = useMemo(() => sortEntries(entries, sort), [entries, sort]);
 
   if (loading) {
     return (
@@ -22,10 +40,17 @@ export default function JournalScreen({ navigation }: Props) {
     );
   }
 
+  const header = entries.length > 0 ? (
+    <>
+      <StatsHeader entries={entries} />
+      <SortBar sort={sort} onSort={setSort} />
+    </>
+  ) : null;
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['bottom']}>
       <FlatList
-        data={entries}
+        data={sorted}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <JournalListItem
@@ -35,7 +60,7 @@ export default function JournalScreen({ navigation }: Props) {
         )}
         refreshing={false}
         onRefresh={refresh}
-        ListHeaderComponent={entries.length > 0 ? <StatsHeader entries={entries} /> : null}
+        ListHeaderComponent={header}
         contentContainerStyle={[
           styles.list,
           entries.length === 0 && styles.emptyContainer,
@@ -57,6 +82,28 @@ export default function JournalScreen({ navigation }: Props) {
         <Text style={styles.fabText}>+</Text>
       </Pressable>
     </SafeAreaView>
+  );
+}
+
+function SortBar({ sort, onSort }: { sort: SortKey; onSort: (s: SortKey) => void }) {
+  const { theme } = useTheme();
+  return (
+    <View style={sortStyles.row}>
+      {SORT_OPTIONS.map((opt) => (
+        <Pressable
+          key={opt.key}
+          style={[
+            sortStyles.chip,
+            { borderColor: theme.border, backgroundColor: opt.key === sort ? theme.primary : theme.surface },
+          ]}
+          onPress={() => onSort(opt.key)}
+        >
+          <Text style={[sortStyles.chipText, { color: opt.key === sort ? '#fff' : theme.textMuted }]}>
+            {opt.label}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
   );
 }
 
@@ -89,6 +136,25 @@ function StatsHeader({ entries }: { entries: JournalEntry[] }) {
     </View>
   );
 }
+
+const sortStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    gap: spacing.xs,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+  },
+  chip: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  chipText: {
+    fontSize: typography.size.xs,
+    fontWeight: '600',
+  },
+});
 
 const statsStyles = StyleSheet.create({
   card: {

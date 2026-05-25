@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Image,
+  Linking,
   Pressable,
   ScrollView,
   Share,
@@ -138,8 +139,22 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
             {cocktail.instructions}
           </Text>
 
+          {cocktail.video ? (
+            <Pressable
+              style={[styles.actionButton, { backgroundColor: theme.surface, borderColor: theme.border }]}
+              onPress={() => {
+                haptics.light();
+                Linking.openURL(cocktail.video!);
+              }}
+            >
+              <Text style={[styles.actionButtonText, { color: theme.text }]}>
+                ▶ Watch Video
+              </Text>
+            </Pressable>
+          ) : null}
+
           <Pressable
-            style={[styles.saveButton, { backgroundColor: theme.surface, borderColor: theme.border }]}
+            style={[styles.actionButton, { backgroundColor: theme.surface, borderColor: theme.border }]}
             onPress={() => {
               haptics.light();
               tabNav.navigate('JournalTab', {
@@ -148,7 +163,7 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
               });
             }}
           >
-            <Text style={[styles.saveButtonText, { color: theme.text }]}>
+            <Text style={[styles.actionButtonText, { color: theme.text }]}>
               💾 Save to Journal
             </Text>
           </Pressable>
@@ -181,6 +196,7 @@ const styles = StyleSheet.create({
   },
   body: {
     padding: spacing.md,
+    paddingBottom: spacing.xl,
     gap: spacing.sm,
   },
   name: {
@@ -225,15 +241,14 @@ const styles = StyleSheet.create({
     fontSize: typography.size.md,
     lineHeight: typography.size.md * 1.6,
   },
-  saveButton: {
-    marginTop: spacing.lg,
-    marginBottom: spacing.xl,
+  actionButton: {
+    marginTop: spacing.sm,
     padding: spacing.md,
     borderRadius: 12,
     borderWidth: 1,
     alignItems: 'center',
   },
-  saveButtonText: {
+  actionButtonText: {
     fontSize: typography.size.md,
     fontWeight: typography.weight.medium,
   },
