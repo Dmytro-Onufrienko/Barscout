@@ -53,6 +53,16 @@ export async function getById(id: string): Promise<Cocktail> {
   return results[0];
 }
 
+export async function searchByIngredient(ingredient: string): Promise<CocktailPreview[]> {
+  const response = await fetch(`${BASE_URL}/filter.php?i=${encodeURIComponent(ingredient)}`);
+  if (!response.ok) throw new CocktailApiError('Failed to search by ingredient', response.status);
+  const json = await response.json();
+  if (!json.drinks) return [];
+  return (json.drinks as { idDrink: string; strDrink: string; strDrinkThumb: string }[]).map(
+    (d) => ({ id: d.idDrink, name: d.strDrink, thumbnail: d.strDrinkThumb }),
+  );
+}
+
 export async function getCategories(): Promise<string[]> {
   const response = await fetch(`${BASE_URL}/list.php?c=list`);
   if (!response.ok) throw new CocktailApiError('Failed to load categories', response.status);
