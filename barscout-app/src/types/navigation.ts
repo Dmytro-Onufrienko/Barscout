@@ -4,6 +4,7 @@ export type RootTabParamList = {
   RandomizerTab: undefined;
   BarFinderTab: undefined;
   JournalTab: NavigatorScreenParams<JournalStackParamList> | undefined;
+  SettingsTab: undefined;
 };
 
 export type RandomizerStackParamList = {

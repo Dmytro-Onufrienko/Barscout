@@ -1,17 +1,16 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '@/theme';
+import { useTheme } from '@/theme';
 import RandomizerStack from '@/navigation/RandomizerStack';
 import BarFinderScreen from '@/screens/BarFinderScreen';
 import JournalStack from '@/navigation/JournalStack';
+import SettingsScreen from '@/screens/SettingsScreen';
 import type { RootTabParamList } from '@/types/navigation';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export default function BottomTabs() {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+  const { theme } = useTheme();
 
   return (
     <Tab.Navigator
@@ -49,6 +48,20 @@ export default function BottomTabs() {
           title: 'Journal',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SettingsTab"
+        component={SettingsScreen}
+        options={{
+          title: 'Settings',
+          headerShown: true,
+          headerTitle: 'Налаштування',
+          headerStyle: { backgroundColor: theme.background },
+          headerTitleStyle: { color: theme.text },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" color={color} size={size} />
           ),
         }}
       />
