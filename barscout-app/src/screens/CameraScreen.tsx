@@ -11,7 +11,7 @@ type Props = NativeStackScreenProps<JournalStackParamList, 'Camera'>;
 
 export default function CameraScreen({ navigation }: Props) {
 
-  const { theme, scheme } = useTheme();
+  const { theme } = useTheme();
   const cameraRef = useRef<CameraView>(null);
   const [facing, setFacing] = useState<'front' | 'back'>('back');
   const [capturing, setCapturing] = useState(false);

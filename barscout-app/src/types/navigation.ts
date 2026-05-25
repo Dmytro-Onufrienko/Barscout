@@ -15,7 +15,7 @@ export type RandomizerStackParamList = {
 export type JournalStackParamList = {
   Journal: undefined;
   Camera: undefined;
-  JournalEntry: { photoUri?: string; cocktailId?: string; cocktailName?: string };
+  JournalEntry: { photoUri?: string; cocktailId?: string; cocktailName?: string; entryId?: string; notes?: string; rating?: number };
   JournalDetail: { entryId: string };
 };
 

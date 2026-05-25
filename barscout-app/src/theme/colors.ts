@@ -36,4 +36,4 @@ export const colors = {
 } as const;
 
 export type ColorScheme = keyof typeof colors;
-export type ThemeColors = typeof colors.light;
+export type ThemeColors = { readonly [K in keyof typeof colors.light]: string };

@@ -27,7 +27,7 @@ function formatDate(iso: string): string {
 
 export default function JournalDetailScreen({ route, navigation }: Props) {
 
-  const { theme, scheme } = useTheme();
+  const { theme } = useTheme();
   const { entries, deleteEntry } = useJournal();
 
   const entry = entries.find((e) => e.id === route.params.entryId);
@@ -62,9 +62,12 @@ export default function JournalDetailScreen({ route, navigation }: Props) {
 
   const handleEdit = () => {
     navigation.navigate('JournalEntry', {
+      entryId: entry.id,
       cocktailId: entry.cocktailId,
       cocktailName: entry.cocktailName,
       photoUri: entry.photoUri,
+      notes: entry.notes,
+      rating: entry.rating,
     });
   };
 

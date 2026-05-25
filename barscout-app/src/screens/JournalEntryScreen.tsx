@@ -41,12 +41,12 @@ const starStyles = StyleSheet.create({
 
 export default function JournalEntryScreen({ route, navigation }: Props) {
 
-  const { theme, scheme } = useTheme();
+  const { theme } = useTheme();
 
   const { saveEntry } = useJournal();
   const [cocktailName, setCocktailName] = useState(route.params.cocktailName ?? '');
-  const [notes, setNotes] = useState('');
-  const [rating, setRating] = useState(0);
+  const [notes, setNotes] = useState(route.params.notes ?? '');
+  const [rating, setRating] = useState(route.params.rating ?? 0);
   const [photoUri, setPhotoUri] = useState(route.params.photoUri);
   const [saving, setSaving] = useState(false);
 
@@ -58,7 +58,7 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
     try {
       const permanentUri = photoUri ? await savePhotoPermanently(photoUri) : undefined;
       await saveEntry({
-        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        id: route.params.entryId ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         cocktailId: route.params.cocktailId,
         cocktailName: cocktailName.trim(),
         photoUri: permanentUri,

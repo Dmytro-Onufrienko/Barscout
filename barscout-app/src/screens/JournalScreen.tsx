@@ -10,7 +10,7 @@ type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
 
 export default function JournalScreen({ navigation }: Props) {
 
-  const { theme, scheme } = useTheme();
+  const { theme } = useTheme();
   const { entries, loading, refresh } = useJournal();
 
   if (loading) {

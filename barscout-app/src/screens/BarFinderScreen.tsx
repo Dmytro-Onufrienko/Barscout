@@ -25,7 +25,7 @@ function formatRadius(r: Radius): string {
 
 export default function BarFinderScreen() {
 
-  const { theme, scheme } = useTheme();
+  const { theme } = useTheme();
   const { state, requestLocation, openSettings } = useLocation();
 
   const [bars, setBars] = useState<Bar[]>([]);

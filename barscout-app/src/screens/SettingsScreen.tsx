@@ -1,12 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import type { ColorMode } from '@/theme/ThemeContext';
 
-const COLOR_MODES: { value: ColorMode; label: string; icon: string }[] = [
-  { value: 'auto',  label: 'Системна', icon: '⚙️' },
-  { value: 'light', label: 'Світла',   icon: '☀️' },
-  { value: 'dark',  label: 'Темна',    icon: '🌙' },
+type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
+
+const COLOR_MODES: { value: ColorMode; label: string; icon: IoniconName }[] = [
+  { value: 'auto',  label: 'Системна', icon: 'settings-outline' },
+  { value: 'light', label: 'Світла',   icon: 'sunny-outline' },
+  { value: 'dark',  label: 'Темна',    icon: 'moon-outline' },
 ];
 
 export default function SettingsScreen() {
@@ -28,7 +31,7 @@ export default function SettingsScreen() {
               ]}
               onPress={() => setColorMode(item.value)}
             >
-              <Text style={styles.icon}>{item.icon}</Text>
+              <Ionicons name={item.icon} size={20} color={theme.textMuted} style={styles.icon} />
               <Text style={[styles.label, { color: theme.text }]}>{item.label}</Text>
               {selected && (
                 <Text style={[styles.checkmark, { color: theme.primary }]}>✓</Text>
@@ -68,7 +71,6 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   icon: {
-    fontSize: 20,
     width: 28,
     textAlign: 'center',
   },
