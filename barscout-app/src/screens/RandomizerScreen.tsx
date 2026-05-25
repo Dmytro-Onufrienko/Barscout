@@ -11,8 +11,10 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { spacing, typography, useTheme } from '@/theme';
 import { useRandomCocktail } from '@/hooks/useRandomCocktail';
+import { useCocktailOfTheDay } from '@/hooks/useCocktailOfTheDay';
 import CocktailCard from '@/components/CocktailCard';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
+import CotdBanner from '@/components/CotdBanner';
 import ErrorView from '@/components/ErrorView';
 import { useShakeDetector } from '@/hooks/useShakeDetector';
 import { useHaptics } from '@/hooks/useHaptics';
@@ -25,6 +27,7 @@ export default function RandomizerScreen() {
   const navigation = useNavigation<Nav>();
   const isFocused = useIsFocused();
   const { cocktail, loading, error, shuffle } = useRandomCocktail();
+  const { cocktail: cotd } = useCocktailOfTheDay();
   const haptics = useHaptics();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -53,6 +56,18 @@ export default function RandomizerScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      {cotd && (
+        <View style={styles.cotdWrap}>
+          <CotdBanner
+            cocktail={cotd}
+            onPress={() => {
+              haptics.light();
+              navigation.navigate('CocktailDetail', { cocktailId: cotd.id });
+            }}
+          />
+        </View>
+      )}
+
       {loading && <CocktailCardSkeleton />}
 
       {!loading && error && <ErrorView message={error.message} onRetry={shuffle} />}
@@ -83,6 +98,9 @@ export default function RandomizerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  cotdWrap: {
+    paddingTop: spacing.md,
   },
   content: {
     flex: 1,
