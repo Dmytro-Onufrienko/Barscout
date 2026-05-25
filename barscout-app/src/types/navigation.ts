@@ -10,6 +10,7 @@ export type RootTabParamList = {
 
 export type RandomizerStackParamList = {
   Randomizer: undefined;
+  Search: undefined;
   CocktailDetail: { cocktailId: string };
 };
 
