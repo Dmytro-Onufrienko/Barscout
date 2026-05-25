@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -50,6 +51,12 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
   const [photoUri, setPhotoUri] = useState(route.params.photoUri);
   const [saving, setSaving] = useState(false);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: route.params.entryId ? 'Edit Entry' : 'New Entry',
+    });
+  }, [route.params.entryId]);
+
   useEffect(() => {
     if (route.params.photoUri !== undefined) {
       setPhotoUri(route.params.photoUri);
@@ -75,7 +82,9 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
         notes,
         createdAt: route.params.createdAt ?? new Date().toISOString(),
       });
-      navigation.popToTop();
+      navigation.goBack();
+    } catch {
+      Alert.alert('Помилка', 'Не вдалося зберегти запис. Спробуйте ще раз.');
     } finally {
       setSaving(false);
     }
