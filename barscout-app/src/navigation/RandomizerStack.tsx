@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Pressable, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@/theme';
 import RandomizerScreen from '@/screens/RandomizerScreen';
 import SearchScreen from '@/screens/SearchScreen';
+import BrowseScreen from '@/screens/BrowseScreen';
+import CategoryResultsScreen from '@/screens/CategoryResultsScreen';
 import CocktailDetailScreen from '@/screens/CocktailDetailScreen';
 import type { RandomizerStackParamList } from '@/types/navigation';
 
@@ -25,9 +27,14 @@ export default function RandomizerStack() {
         options={({ navigation }) => ({
           title: 'Randomizer',
           headerRight: () => (
-            <Pressable hitSlop={12} onPress={() => navigation.navigate('Search')}>
-              <Text style={{ fontSize: 20 }}>🔍</Text>
-            </Pressable>
+            <View style={styles.headerButtons}>
+              <Pressable hitSlop={12} onPress={() => navigation.navigate('Browse')}>
+                <Text style={{ fontSize: 20 }}>🗂️</Text>
+              </Pressable>
+              <Pressable hitSlop={12} onPress={() => navigation.navigate('Search')}>
+                <Text style={{ fontSize: 20 }}>🔍</Text>
+              </Pressable>
+            </View>
           ),
         })}
       />
@@ -37,6 +44,16 @@ export default function RandomizerStack() {
         options={{ title: 'Пошук' }}
       />
       <Stack.Screen
+        name="Browse"
+        component={BrowseScreen}
+        options={{ title: 'Категорії' }}
+      />
+      <Stack.Screen
+        name="CategoryResults"
+        component={CategoryResultsScreen}
+        options={({ route }) => ({ title: route.params.category })}
+      />
+      <Stack.Screen
         name="CocktailDetail"
         component={CocktailDetailScreen}
         options={{ title: 'Cocktail Detail' }}
@@ -44,3 +61,10 @@ export default function RandomizerStack() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+});

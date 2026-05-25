@@ -1,3 +1,9 @@
+export type CocktailPreview = {
+  id: string;
+  name: string;
+  thumbnail: string;
+};
+
 export type Ingredient = {
   name: string;
   measure: string;
