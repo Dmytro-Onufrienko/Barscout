@@ -3,6 +3,7 @@ import {
   Image,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   View,
@@ -39,15 +40,28 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
     navigation.setOptions({
       headerRight: cocktail
         ? () => (
-            <Pressable
-              hitSlop={12}
-              onPress={async () => {
-                await toggleFavorite({ id: cocktail.id, name: cocktail.name, thumbnail: cocktail.thumbnail });
-                haptics.light();
-              }}
-            >
-              <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
-            </Pressable>
+            <View style={styles.headerButtons}>
+              <Pressable
+                hitSlop={12}
+                onPress={() =>
+                  Share.share({
+                    title: cocktail.name,
+                    message: `${cocktail.name} — check it out on TheCocktailDB: https://www.thecocktaildb.com/drink/${cocktail.id}`,
+                  })
+                }
+              >
+                <Text style={{ fontSize: 20 }}>📤</Text>
+              </Pressable>
+              <Pressable
+                hitSlop={12}
+                onPress={async () => {
+                  await toggleFavorite({ id: cocktail.id, name: cocktail.name, thumbnail: cocktail.thumbnail });
+                  haptics.light();
+                }}
+              >
+                <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
+              </Pressable>
+            </View>
           )
         : undefined,
     });
@@ -151,6 +165,11 @@ function Tag({ label, color }: { label: string; color: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
   },
   hero: {
     width: '100%',
