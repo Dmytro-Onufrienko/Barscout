@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useColorScheme } from 'react-native';
-import { colors } from '@/theme';
+import { useTheme } from '@/theme';
 import RandomizerScreen from '@/screens/RandomizerScreen';
 import CocktailDetailScreen from '@/screens/CocktailDetailScreen';
 import type { RandomizerStackParamList } from '@/types/navigation';
@@ -8,8 +7,7 @@ import type { RandomizerStackParamList } from '@/types/navigation';
 const Stack = createNativeStackNavigator<RandomizerStackParamList>();
 
 export default function RandomizerStack() {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+  const { theme } = useTheme();
 
   return (
     <Stack.Navigator

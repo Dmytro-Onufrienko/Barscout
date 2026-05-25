@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useColorScheme } from 'react-native';
-import { colors } from '@/theme';
+import { useTheme } from '@/theme';
 import JournalScreen from '@/screens/JournalScreen';
 import CameraScreen from '@/screens/CameraScreen';
 import JournalEntryScreen from '@/screens/JournalEntryScreen';
@@ -10,8 +9,7 @@ import type { JournalStackParamList } from '@/types/navigation';
 const Stack = createNativeStackNavigator<JournalStackParamList>();
 
 export default function JournalStack() {
-  const scheme = useColorScheme() ?? 'light';
-  const theme = colors[scheme];
+  const { theme } = useTheme();
 
   return (
     <Stack.Navigator
