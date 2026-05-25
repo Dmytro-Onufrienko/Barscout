@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 const PHOTOS_DIR = `${FileSystem.documentDirectory}cocktail_photos/`;
 
@@ -26,7 +26,7 @@ export async function deletePhoto(uri: string): Promise<void> {
 }
 
 export async function getPhotoSize(uri: string): Promise<number> {
-  const info = await FileSystem.getInfoAsync(uri, { size: true });
+  const info = await FileSystem.getInfoAsync(uri);
   if (!info.exists) return 0;
-  return (info as FileSystem.FileInfo & { size: number }).size ?? 0;
+  return info.size ?? 0;
 }
