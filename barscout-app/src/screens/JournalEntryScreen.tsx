@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -49,6 +49,12 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
   const [rating, setRating] = useState(route.params.rating ?? 0);
   const [photoUri, setPhotoUri] = useState(route.params.photoUri);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (route.params.photoUri !== undefined) {
+      setPhotoUri(route.params.photoUri);
+    }
+  }, [route.params.photoUri]);
 
   const isValid = cocktailName.trim().length > 0 && rating > 0;
 
