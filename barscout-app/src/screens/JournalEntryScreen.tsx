@@ -56,7 +56,10 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
     if (!isValid || saving) return;
     setSaving(true);
     try {
-      const permanentUri = photoUri ? await savePhotoPermanently(photoUri) : undefined;
+      const photoChanged = photoUri !== route.params.photoUri;
+      const permanentUri = photoUri
+        ? photoChanged ? await savePhotoPermanently(photoUri) : photoUri
+        : undefined;
       await saveEntry({
         id: route.params.entryId ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         cocktailId: route.params.cocktailId,
@@ -64,7 +67,7 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
         photoUri: permanentUri,
         rating,
         notes,
-        createdAt: new Date().toISOString(),
+        createdAt: route.params.createdAt ?? new Date().toISOString(),
       });
       navigation.popToTop();
     } finally {

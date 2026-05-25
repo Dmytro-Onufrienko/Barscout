@@ -68,6 +68,7 @@ export default function JournalDetailScreen({ route, navigation }: Props) {
       photoUri: entry.photoUri,
       notes: entry.notes,
       rating: entry.rating,
+      createdAt: entry.createdAt,
     });
   };
 
