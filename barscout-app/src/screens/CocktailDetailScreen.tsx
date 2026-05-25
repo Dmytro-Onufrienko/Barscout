@@ -8,11 +8,13 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { spacing, typography, useTheme } from '@/theme';
 import { getById } from '@/services/cocktailApi';
 import type { Cocktail } from '@/types/cocktail';
-import type { RandomizerStackParamList } from '@/types/navigation';
+import type { RandomizerStackParamList, RootTabParamList } from '@/types/navigation';
 import CocktailCardSkeleton from '@/components/CocktailCardSkeleton';
 import ErrorView from '@/components/ErrorView';
 import { useFavorites } from '@/contexts/FavoritesContext';
@@ -24,6 +26,7 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
   const { cocktailId } = route.params;
   const { theme } = useTheme();
 
+  const tabNav = useNavigation<BottomTabNavigationProp<RootTabParamList>>();
   const { isFavorite, toggleFavorite } = useFavorites();
   const haptics = useHaptics();
   const [cocktail, setCocktail] = useState<Cocktail | null>(null);
@@ -118,7 +121,11 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
           <Pressable
             style={[styles.saveButton, { backgroundColor: theme.surface, borderColor: theme.border }]}
             onPress={() => {
-              // TODO: connect in Phase 6
+              haptics.light();
+              tabNav.navigate('JournalTab', {
+                screen: 'JournalEntry',
+                params: { cocktailId: cocktail.id, cocktailName: cocktail.name },
+              });
             }}
           >
             <Text style={[styles.saveButtonText, { color: theme.text }]}>
