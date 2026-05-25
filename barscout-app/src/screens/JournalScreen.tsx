@@ -4,6 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import JournalListItem from '@/components/JournalListItem';
+import type { JournalEntry } from '@/types/journalEntry';
 import type { JournalStackParamList } from '@/types/navigation';
 
 type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
@@ -34,6 +35,7 @@ export default function JournalScreen({ navigation }: Props) {
         )}
         refreshing={false}
         onRefresh={refresh}
+        ListHeaderComponent={entries.length > 0 ? <StatsHeader entries={entries} /> : null}
         contentContainerStyle={[
           styles.list,
           entries.length === 0 && styles.emptyContainer,
@@ -57,6 +59,68 @@ export default function JournalScreen({ navigation }: Props) {
     </SafeAreaView>
   );
 }
+
+function StatsHeader({ entries }: { entries: JournalEntry[] }) {
+  const { theme } = useTheme();
+  const rated = entries.filter((e) => e.rating > 0);
+  const avgRating = rated.length > 0
+    ? (rated.reduce((sum, e) => sum + e.rating, 0) / rated.length).toFixed(1)
+    : null;
+  const withPhoto = entries.filter((e) => e.photoUri).length;
+
+  return (
+    <View style={[statsStyles.card, { backgroundColor: theme.surface }]}>
+      <View style={statsStyles.stat}>
+        <Text style={[statsStyles.value, { color: theme.text }]}>{entries.length}</Text>
+        <Text style={[statsStyles.label, { color: theme.textMuted }]}>Tastings</Text>
+      </View>
+      <View style={[statsStyles.divider, { backgroundColor: theme.border }]} />
+      <View style={statsStyles.stat}>
+        <Text style={[statsStyles.value, { color: theme.text }]}>
+          {avgRating ?? '—'}
+        </Text>
+        <Text style={[statsStyles.label, { color: theme.textMuted }]}>Avg Rating</Text>
+      </View>
+      <View style={[statsStyles.divider, { backgroundColor: theme.border }]} />
+      <View style={statsStyles.stat}>
+        <Text style={[statsStyles.value, { color: theme.text }]}>{withPhoto}</Text>
+        <Text style={[statsStyles.label, { color: theme.textMuted }]}>With Photo</Text>
+      </View>
+    </View>
+  );
+}
+
+const statsStyles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    borderRadius: 14,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+    paddingVertical: spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  stat: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 2,
+  },
+  value: {
+    fontSize: typography.size.xl,
+    fontWeight: typography.weight.bold,
+  },
+  label: {
+    fontSize: typography.size.xs,
+    fontWeight: typography.weight.medium,
+  },
+  divider: {
+    width: StyleSheet.hairlineWidth,
+    marginVertical: spacing.xs,
+  },
+});
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

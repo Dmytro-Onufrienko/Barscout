@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -23,11 +23,11 @@ type Props = NativeStackScreenProps<RandomizerStackParamList, 'Search'>;
 type SearchMode = 'name' | 'ingredient';
 type SearchState = 'idle' | 'loading' | 'done' | 'error';
 
-export default function SearchScreen({ navigation }: Props) {
+export default function SearchScreen({ navigation, route }: Props) {
   const { theme } = useTheme();
   const haptics = useHaptics();
-  const [mode, setMode] = useState<SearchMode>('name');
-  const [query, setQuery] = useState('');
+  const [mode, setMode] = useState<SearchMode>(route.params?.initialMode ?? 'name');
+  const [query, setQuery] = useState(route.params?.initialQuery ?? '');
   const [nameResults, setNameResults] = useState<Cocktail[]>([]);
   const [ingredientResults, setIngredientResults] = useState<CocktailPreview[]>([]);
   const [state, setState] = useState<SearchState>('idle');
@@ -53,6 +53,10 @@ export default function SearchScreen({ navigation }: Props) {
     } catch {
       setState('error');
     }
+  }, []);
+
+  useEffect(() => {
+    if (query.trim()) runSearch(query, mode);
   }, []);
 
   const handleChangeText = (text: string) => {

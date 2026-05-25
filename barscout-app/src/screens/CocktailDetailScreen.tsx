@@ -119,14 +119,18 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
 
           <Text style={[styles.sectionTitle, { color: theme.text }]}>Ingredients</Text>
           {cocktail.ingredients.map((ing, i) => (
-            <View key={i} style={[styles.ingredient, { borderBottomColor: theme.border }]}>
-              <Text style={[styles.ingredientName, { color: theme.text }]}>{ing.name}</Text>
+            <Pressable
+              key={i}
+              style={[styles.ingredient, { borderBottomColor: theme.border }]}
+              onPress={() => navigation.navigate('Search', { initialQuery: ing.name, initialMode: 'ingredient' })}
+            >
+              <Text style={[styles.ingredientName, { color: theme.primary }]}>{ing.name}</Text>
               {ing.measure ? (
                 <Text style={[styles.ingredientMeasure, { color: theme.textMuted }]}>
                   {ing.measure}
                 </Text>
               ) : null}
-            </View>
+            </Pressable>
           ))}
 
           <Text style={[styles.sectionTitle, { color: theme.text }]}>Instructions</Text>

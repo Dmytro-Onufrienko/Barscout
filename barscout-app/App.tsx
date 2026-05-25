@@ -3,6 +3,7 @@ import RootNavigator from '@/navigation/RootNavigator';
 import { ThemeProvider, useTheme } from '@/theme';
 import { JournalProvider } from '@/contexts/JournalContext';
 import { FavoritesProvider } from '@/contexts/FavoritesContext';
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
 
 function AppContent() {
   const { scheme } = useTheme();
@@ -17,11 +18,13 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <JournalProvider>
-        <FavoritesProvider>
-          <AppContent />
-        </FavoritesProvider>
-      </JournalProvider>
+      <OnboardingProvider>
+        <JournalProvider>
+          <FavoritesProvider>
+            <AppContent />
+          </FavoritesProvider>
+        </JournalProvider>
+      </OnboardingProvider>
     </ThemeProvider>
   );
 }

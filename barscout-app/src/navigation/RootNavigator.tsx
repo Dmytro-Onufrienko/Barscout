@@ -1,10 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { useOnboarding } from '@/hooks/useOnboarding';
+import { useOnboardingContext } from '@/contexts/OnboardingContext';
 import BottomTabs from './BottomTabs';
 import OnboardingScreen from '@/screens/OnboardingScreen';
 
 export default function RootNavigator() {
-  const { status, completeOnboarding } = useOnboarding();
+  const { status, completeOnboarding } = useOnboardingContext();
 
   if (status === 'loading') return null;
 
