@@ -3,7 +3,7 @@
 .vscode/
 
 # Claude Code
-.claude
+.claude/
 
 # OS
 .DS_Store
