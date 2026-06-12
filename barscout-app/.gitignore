@@ -29,6 +29,7 @@ yarn-error.*
 # IDE
 .vscode/
 .idea/
+.claude
 
 # macOS
 .DS_Store
