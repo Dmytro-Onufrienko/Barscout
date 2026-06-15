@@ -2,8 +2,16 @@
 .idea
 .vscode/
 
-# Claude Code
+# AI agents / assistants
 .claude/
+.cursor/
+.cursorrules
+.aider*
+.windsurf/
+.github/copilot-instructions.md
+CLAUDE.md
+AGENTS.md
+GEMINI.md
 
 # OS
 .DS_Store

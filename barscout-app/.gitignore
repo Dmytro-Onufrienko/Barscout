@@ -29,7 +29,16 @@ yarn-error.*
 # IDE
 .vscode/
 .idea/
-.claude
+
+# AI agents / assistants
+.claude/
+.cursor/
+.cursorrules
+.aider*
+.windsurf/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
 
 # macOS
 .DS_Store
