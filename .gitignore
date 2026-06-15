@@ -37,3 +37,4 @@ node_modules/
 # EAS
 /android
 /ios
+/barscout-app/.claude/
