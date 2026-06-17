@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CameraView } from 'expo-camera';
+import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { spacing, typography, useTheme } from '@/theme';
 import { useCameraPermission } from '@/hooks/useCameraPermission';
@@ -33,7 +34,7 @@ export default function CameraScreen({ navigation }: Props) {
   if (state.status === 'idle') {
     return (
       <SafeAreaView style={[styles.centered, { backgroundColor: theme.background }]}>
-        <Text style={styles.emoji}>📷</Text>
+        <Ionicons name="camera-outline" size={48} color={theme.textMuted} />
         <Text style={[styles.hint, { color: theme.textMuted }]}>
           Потрібен доступ до камери
         </Text>
@@ -58,7 +59,7 @@ export default function CameraScreen({ navigation }: Props) {
   if (state.status === 'denied') {
     return (
       <SafeAreaView style={[styles.centered, { backgroundColor: theme.background }]}>
-        <Text style={styles.emoji}>🚫</Text>
+        <Ionicons name="ban-outline" size={48} color={theme.textMuted} />
         <Text style={[styles.hint, { color: theme.textMuted }]}>
           Доступ до камери заборонено
         </Text>
@@ -90,7 +91,7 @@ export default function CameraScreen({ navigation }: Props) {
           style={styles.flipButton}
           onPress={() => setFacing((f) => (f === 'back' ? 'front' : 'back'))}
         >
-          <Text style={styles.flipText}>🔄</Text>
+          <Ionicons name="camera-reverse-outline" size={28} color="#fff" />
         </Pressable>
 
         <Pressable
@@ -102,7 +103,7 @@ export default function CameraScreen({ navigation }: Props) {
         </Pressable>
 
         <Pressable style={styles.flipButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.flipText}>✕</Text>
+          <Ionicons name="close" size={28} color="#fff" />
         </Pressable>
       </SafeAreaView>
     </View>
@@ -160,12 +161,6 @@ const styles = StyleSheet.create({
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  flipText: {
-    fontSize: 24,
-  },
-  emoji: {
-    fontSize: 48,
   },
   hint: {
     fontSize: typography.size.md,

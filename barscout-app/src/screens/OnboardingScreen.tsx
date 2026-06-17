@@ -9,6 +9,7 @@ import {
   ViewToken,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -16,19 +17,19 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SLIDES = [
   {
     id: '1',
-    emoji: '🎲',
+    icon: 'shuffle' as const,
     title: 'Discover Cocktails',
     body: 'Shake your phone to get a random cocktail, search by name or ingredient, and browse by category.',
   },
   {
     id: '2',
-    emoji: '❤️',
+    icon: 'heart' as const,
     title: 'Save & Journal',
     body: 'Favorite the cocktails you love and keep a photo journal of your tastings with ratings and notes.',
   },
   {
     id: '3',
-    emoji: '🍺',
+    icon: 'beer' as const,
     title: 'Find Nearby Bars',
     body: 'Discover bars and pubs near your location, sorted by distance, and open them in Maps.',
   },
@@ -74,7 +75,7 @@ export default function OnboardingScreen({ onDone }: Props) {
         viewabilityConfig={viewabilityConfig}
         renderItem={({ item }) => (
           <View style={styles.slide}>
-            <Text style={styles.emoji}>{item.emoji}</Text>
+            <Ionicons name={item.icon} size={80} color={theme.primary} />
             <Text style={[styles.title, { color: theme.text }]}>{item.title}</Text>
             <Text style={[styles.body, { color: theme.textMuted }]}>{item.body}</Text>
           </View>
@@ -121,7 +122,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     gap: spacing.lg,
   },
-  emoji: { fontSize: 80 },
   title: {
     fontSize: typography.size.xxxl,
     fontWeight: typography.weight.bold,

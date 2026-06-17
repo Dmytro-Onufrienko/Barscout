@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import JournalListItem from '@/components/JournalListItem';
@@ -12,10 +13,10 @@ type Props = NativeStackScreenProps<JournalStackParamList, 'Journal'>;
 
 type SortKey = 'newest' | 'oldest' | 'rating';
 
-const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: 'newest', label: '🕐 Newest' },
-  { key: 'oldest', label: '🕑 Oldest' },
-  { key: 'rating', label: '⭐ Best' },
+const SORT_OPTIONS: { key: SortKey; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { key: 'newest', label: 'Newest', icon: 'time-outline' },
+  { key: 'oldest', label: 'Oldest', icon: 'time' },
+  { key: 'rating', label: 'Best', icon: 'star' },
 ];
 
 function sortEntries(entries: JournalEntry[], sort: SortKey): JournalEntry[] {
@@ -67,7 +68,7 @@ export default function JournalScreen({ navigation }: Props) {
         ]}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>📔</Text>
+            <Ionicons name="book-outline" size={56} color={theme.textMuted} />
             <Text style={[styles.emptyText, { color: theme.textMuted }]}>
               Поки що пусто.{'\n'}Додай перший коктейль!
             </Text>
@@ -98,6 +99,11 @@ function SortBar({ sort, onSort }: { sort: SortKey; onSort: (s: SortKey) => void
           ]}
           onPress={() => onSort(opt.key)}
         >
+          <Ionicons
+            name={opt.icon}
+            size={13}
+            color={opt.key === sort ? '#fff' : theme.textMuted}
+          />
           <Text style={[sortStyles.chipText, { color: opt.key === sort ? '#fff' : theme.textMuted }]}>
             {opt.label}
           </Text>
@@ -145,6 +151,9 @@ const sortStyles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs + 2,
     borderRadius: 20,

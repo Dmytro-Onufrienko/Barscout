@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { spacing, typography, useTheme } from '@/theme';
@@ -40,18 +41,18 @@ export default function RandomizerScreen() {
       headerRight: () => (
         <View style={styles.headerButtons}>
           <Pressable hitSlop={12} onPress={() => setFilterVisible(true)}>
-            <Text style={{ fontSize: 20 }}>🎯</Text>
+            <Ionicons name="filter" size={22} color={theme.text} />
           </Pressable>
           <Pressable hitSlop={12} onPress={() => navigation.navigate('Browse')}>
-            <Text style={{ fontSize: 20 }}>🗂️</Text>
+            <Ionicons name="grid-outline" size={22} color={theme.text} />
           </Pressable>
           <Pressable hitSlop={12} onPress={() => navigation.navigate('Search')}>
-            <Text style={{ fontSize: 20 }}>🔍</Text>
+            <Ionicons name="search" size={22} color={theme.text} />
           </Pressable>
         </View>
       ),
     });
-  }, [navigation, setFilterVisible]);
+  }, [navigation, setFilterVisible, theme.text]);
 
   useEffect(() => {
     shuffle();
@@ -93,7 +94,9 @@ export default function RandomizerScreen() {
           style={[styles.filterChip, { backgroundColor: theme.primary }]}
           onPress={() => setFilterVisible(true)}
         >
-          <Text style={styles.filterChipText}>🎯 {category} ✕</Text>
+          <Ionicons name="filter" size={14} color="#fff" />
+          <Text style={styles.filterChipText}>{category}</Text>
+          <Ionicons name="close" size={14} color="#fff" />
         </Pressable>
       )}
 
@@ -116,7 +119,8 @@ export default function RandomizerScreen() {
             style={[styles.button, { backgroundColor: theme.primary }]}
             onPress={() => shuffle()}
           >
-            <Text style={styles.buttonText}>🎲 Shuffle Again</Text>
+            <Ionicons name="shuffle" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Shuffle Again</Text>
           </Pressable>
         </View>
       )}
@@ -144,10 +148,13 @@ const styles = StyleSheet.create({
     gap: spacing.lg,
   },
   button: {
+    flexDirection: 'row',
     marginHorizontal: spacing.md,
     paddingVertical: spacing.sm + 4,
     borderRadius: 12,
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   buttonText: {
     color: '#fff',
@@ -160,6 +167,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     alignSelf: 'center',
     marginTop: spacing.sm,
     paddingHorizontal: spacing.md,

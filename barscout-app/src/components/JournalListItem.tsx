@@ -1,19 +1,13 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
+import Stars from '@/components/Stars';
 import type { JournalEntry } from '@/types/journalEntry';
 
 type Props = {
   entry: JournalEntry;
   onPress: () => void;
 };
-
-function Stars({ rating }: { rating: number }) {
-  return (
-    <Text style={styles.stars}>
-      {'⭐'.repeat(rating)}{'☆'.repeat(5 - rating)}
-    </Text>
-  );
-}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('uk-UA', {
@@ -39,7 +33,7 @@ export default function JournalListItem({ entry, onPress }: Props) {
         <Image source={{ uri: entry.photoUri }} style={styles.thumbnail} resizeMode="cover" />
       ) : (
         <View style={[styles.thumbnail, styles.noPhoto, { backgroundColor: theme.background }]}>
-          <Text style={styles.noPhotoEmoji}>🍸</Text>
+          <Ionicons name="wine-outline" size={28} color={theme.textMuted} />
         </View>
       )}
 
@@ -47,7 +41,7 @@ export default function JournalListItem({ entry, onPress }: Props) {
         <Text style={[styles.name, { color: theme.text }]} numberOfLines={1}>
           {entry.cocktailName}
         </Text>
-        <Stars rating={entry.rating} />
+        <Stars rating={entry.rating} size={14} />
         <Text style={[styles.date, { color: theme.textMuted }]}>
           {formatDate(entry.createdAt)}
         </Text>
@@ -75,9 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  noPhotoEmoji: {
-    fontSize: 28,
-  },
   info: {
     flex: 1,
     gap: 2,
@@ -85,9 +76,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: typography.size.md,
     fontWeight: typography.weight.semibold,
-  },
-  stars: {
-    fontSize: typography.size.sm,
   },
   date: {
     fontSize: typography.size.sm,

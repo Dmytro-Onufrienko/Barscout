@@ -1,19 +1,13 @@
 import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
+import Stars from '@/components/Stars';
 import type { JournalStackParamList } from '@/types/navigation';
 
 type Props = NativeStackScreenProps<JournalStackParamList, 'JournalDetail'>;
-
-function Stars({ rating }: { rating: number }) {
-  return (
-    <Text style={styles.stars}>
-      {'⭐'.repeat(rating)}{'☆'.repeat(5 - rating)}
-    </Text>
-  );
-}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('uk-UA', {
@@ -79,7 +73,7 @@ export default function JournalDetailScreen({ route, navigation }: Props) {
           <Image source={{ uri: entry.photoUri }} style={styles.photo} resizeMode="cover" />
         ) : (
           <View style={[styles.noPhoto, { backgroundColor: theme.surface }]}>
-            <Text style={styles.noPhotoEmoji}>🍸</Text>
+            <Ionicons name="wine-outline" size={56} color={theme.textMuted} />
           </View>
         )}
 
@@ -103,7 +97,8 @@ export default function JournalDetailScreen({ route, navigation }: Props) {
               ]}
               onPress={handleEdit}
             >
-              <Text style={[styles.actionText, { color: theme.text }]}>✏️ Редагувати</Text>
+              <Ionicons name="create-outline" size={18} color={theme.text} />
+              <Text style={[styles.actionText, { color: theme.text }]}>Редагувати</Text>
             </Pressable>
 
             <Pressable
@@ -113,7 +108,8 @@ export default function JournalDetailScreen({ route, navigation }: Props) {
               ]}
               onPress={handleDelete}
             >
-              <Text style={[styles.actionText, { color: theme.error }]}>🗑 Видалити</Text>
+              <Ionicons name="trash-outline" size={18} color={theme.error} />
+              <Text style={[styles.actionText, { color: theme.error }]}>Видалити</Text>
             </Pressable>
           </View>
         </View>
@@ -133,7 +129,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  noPhotoEmoji: { fontSize: 64 },
   body: {
     padding: spacing.md,
     gap: spacing.sm,
@@ -142,7 +137,6 @@ const styles = StyleSheet.create({
     fontSize: typography.size.xxl,
     fontWeight: typography.weight.bold,
   },
-  stars: { fontSize: typography.size.lg },
   date: { fontSize: typography.size.sm },
   sectionTitle: {
     fontSize: typography.size.md,
@@ -158,10 +152,13 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   actionButton: {
+    flexDirection: 'row',
     padding: spacing.md,
     borderRadius: 12,
     borderWidth: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   actionText: {
     fontSize: typography.size.md,

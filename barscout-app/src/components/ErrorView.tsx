@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 
 type Props = {
@@ -12,7 +13,7 @@ export default function ErrorView({ message = 'Something went wrong', onRetry }:
 
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>⚠️</Text>
+      <Ionicons name="alert-circle-outline" size={48} color={theme.error} />
       <Text style={[styles.message, { color: theme.error }]}>{message}</Text>
       {onRetry && (
         <Pressable
@@ -36,9 +37,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.md,
     paddingHorizontal: spacing.lg,
-  },
-  icon: {
-    fontSize: 40,
   },
   message: {
     fontSize: typography.size.md,

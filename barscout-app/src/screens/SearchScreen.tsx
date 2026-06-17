@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { searchByName, searchByIngredient } from '@/services/cocktailApi';
 import { useHaptics } from '@/hooks/useHaptics';
@@ -81,7 +82,7 @@ export default function SearchScreen({ navigation, route }: Props) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['bottom']}>
       <View style={[styles.searchBar, { backgroundColor: theme.surface, borderColor: theme.border }]}>
-        <Text style={[styles.searchIcon, { color: theme.textMuted }]}>🔍</Text>
+        <Ionicons name="search" size={18} color={theme.textMuted} style={styles.searchIcon} />
         <TextInput
           style={[styles.input, { color: theme.text }]}
           value={query}
@@ -125,7 +126,7 @@ export default function SearchScreen({ navigation, route }: Props) {
 
       {state === 'done' && results.length === 0 && (
         <View style={styles.centered}>
-          <Text style={styles.emptyEmoji}>🍹</Text>
+          <Ionicons name="wine-outline" size={48} color={theme.textMuted} />
           <Text style={[styles.hint, { color: theme.textMuted }]}>
             Нічого не знайдено для "{query}"
           </Text>
@@ -134,7 +135,7 @@ export default function SearchScreen({ navigation, route }: Props) {
 
       {state === 'idle' && (
         <View style={styles.centered}>
-          <Text style={styles.emptyEmoji}>{mode === 'name' ? '🍸' : '🍋'}</Text>
+          <Ionicons name={mode === 'name' ? 'wine-outline' : 'nutrition-outline'} size={48} color={theme.textMuted} />
           <Text style={[styles.hint, { color: theme.textMuted }]}>
             {mode === 'name' ? 'Введіть назву коктейлю' : 'Введіть назву інгредієнта'}
           </Text>

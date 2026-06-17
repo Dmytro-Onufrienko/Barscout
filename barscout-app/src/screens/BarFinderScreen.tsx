@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { useLocation } from '@/hooks/useLocation';
 import { getNearbyBars } from '@/services/overpassApi';
@@ -77,7 +78,7 @@ export default function BarFinderScreen() {
     if (state.status === 'idle') {
       return (
         <View style={styles.centered}>
-          <Text style={styles.emoji}>🍺</Text>
+          <Ionicons name="beer-outline" size={48} color={theme.textMuted} />
           <Text style={[styles.hint, { color: theme.textMuted }]}>
             Знайди бари поруч з тобою
           </Text>
@@ -85,7 +86,8 @@ export default function BarFinderScreen() {
             style={[styles.primaryButton, { backgroundColor: theme.primary }]}
             onPress={handleFind}
           >
-            <Text style={styles.primaryButtonText}>🔍 Знайти бари</Text>
+            <Ionicons name="search" size={18} color="#fff" />
+            <Text style={styles.primaryButtonText}>Знайти бари</Text>
           </Pressable>
         </View>
       );
@@ -105,7 +107,7 @@ export default function BarFinderScreen() {
     if (state.status === 'denied') {
       return (
         <View style={styles.centered}>
-          <Text style={styles.emoji}>📍</Text>
+          <Ionicons name="location-outline" size={48} color={theme.textMuted} />
           <Text style={[styles.hint, { color: theme.textMuted }]}>
             Потрібен доступ до геолокації для пошуку барів
           </Text>
@@ -171,7 +173,7 @@ export default function BarFinderScreen() {
         }
         ListEmptyComponent={
           <View style={styles.centered}>
-            <Text style={styles.emoji}>🏜️</Text>
+            <Ionicons name="sad-outline" size={48} color={theme.textMuted} />
             <Text style={[styles.hint, { color: theme.textMuted }]}>
               Барів поблизу не знайдено
             </Text>
@@ -238,15 +240,16 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
   },
-  emoji: {
-    fontSize: 48,
-  },
   hint: {
     fontSize: typography.size.md,
     textAlign: 'center',
     lineHeight: typography.size.md * 1.5,
   },
   primaryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     paddingVertical: spacing.sm + 4,
     paddingHorizontal: spacing.xl,
     borderRadius: 12,

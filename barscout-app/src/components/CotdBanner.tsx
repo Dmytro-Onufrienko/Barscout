@@ -1,4 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import type { Cocktail } from '@/types/cocktail';
 
@@ -20,7 +21,10 @@ export default function CotdBanner({ cocktail, onPress }: Props) {
     >
       <Image source={{ uri: cocktail.thumbnail }} style={styles.thumb} resizeMode="cover" />
       <View style={styles.info}>
-        <Text style={[styles.label, { color: theme.primary }]}>☀️ Cocktail of the Day</Text>
+        <View style={styles.labelRow}>
+          <Ionicons name="sunny" size={13} color={theme.primary} />
+          <Text style={[styles.label, { color: theme.primary }]}>Cocktail of the Day</Text>
+        </View>
         <Text style={[styles.name, { color: theme.text }]} numberOfLines={1}>
           {cocktail.name}
         </Text>
@@ -53,6 +57,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: spacing.md,
     gap: 2,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   label: {
     fontSize: typography.size.xs,

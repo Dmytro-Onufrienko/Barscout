@@ -3,6 +3,7 @@ import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from 'r
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { useFavorites } from '@/contexts/FavoritesContext';
 import { useHaptics } from '@/hooks/useHaptics';
@@ -33,7 +34,7 @@ export default function FavoritesScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['bottom']}>
       {favorites.length > 0 && (
         <View style={[styles.searchBar, { backgroundColor: theme.surface, borderColor: theme.border }]}>
-          <Text style={[styles.searchIcon, { color: theme.textMuted }]}>🔍</Text>
+          <Ionicons name="search" size={18} color={theme.textMuted} style={styles.searchIcon} />
           <TextInput
             style={[styles.input, { color: theme.text }]}
             value={query}
@@ -70,7 +71,7 @@ export default function FavoritesScreen() {
                 haptics.light();
               }}
             >
-              <Text style={styles.heart}>❤️</Text>
+              <Ionicons name="heart" size={22} color={theme.error} />
             </Pressable>
           </Pressable>
         )}
@@ -78,14 +79,14 @@ export default function FavoritesScreen() {
           <View style={styles.empty}>
             {favorites.length === 0 ? (
               <>
-                <Text style={styles.emptyEmoji}>🤍</Text>
+                <Ionicons name="heart-outline" size={48} color={theme.textMuted} />
                 <Text style={[styles.emptyText, { color: theme.textMuted }]}>
                   Поки що пусто.{'\n'}Додай улюблені коктейлі!
                 </Text>
               </>
             ) : (
               <>
-                <Text style={styles.emptyEmoji}>🔍</Text>
+                <Ionicons name="search" size={48} color={theme.textMuted} />
                 <Text style={[styles.emptyText, { color: theme.textMuted }]}>
                   Нічого не знайдено для "{query}"
                 </Text>

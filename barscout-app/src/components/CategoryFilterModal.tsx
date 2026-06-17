@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { getCategories } from '@/services/cocktailApi';
 
@@ -64,7 +65,7 @@ export default function CategoryFilterModal({ visible, selected, onSelect, onClo
                     {item ?? 'All Categories'}
                   </Text>
                   {isSelected && (
-                    <Text style={[styles.check, { color: theme.primary }]}>✓</Text>
+                    <Ionicons name="checkmark" size={18} color={theme.primary} />
                   )}
                 </Pressable>
               );

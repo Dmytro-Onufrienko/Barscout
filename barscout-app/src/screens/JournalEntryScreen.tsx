@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { useJournal } from '@/contexts/JournalContext';
 import { savePhotoPermanently } from '@/services/photoStorage';
@@ -24,11 +25,16 @@ type Props = NativeStackScreenProps<JournalStackParamList, 'JournalEntry'>;
 const NOTES_MAX = 500;
 
 function StarRating({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const { theme } = useTheme();
   return (
     <View style={starStyles.row}>
       {[1, 2, 3, 4, 5].map((star) => (
         <Pressable key={star} onPress={() => onChange(star)} hitSlop={8}>
-          <Text style={starStyles.star}>{star <= value ? '⭐' : '☆'}</Text>
+          <Ionicons
+            name={star <= value ? 'star' : 'star-outline'}
+            size={32}
+            color={theme.primary}
+          />
         </Pressable>
       ))}
     </View>
@@ -37,7 +43,6 @@ function StarRating({ value, onChange }: { value: number; onChange: (v: number) 
 
 const starStyles = StyleSheet.create({
   row: { flexDirection: 'row', gap: spacing.xs },
-  star: { fontSize: 28 },
 });
 
 export default function JournalEntryScreen({ route, navigation }: Props) {
@@ -108,8 +113,9 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
                 style={[styles.replacePhoto, { backgroundColor: theme.surface }]}
                 onPress={() => navigation.navigate('Camera')}
               >
+                <Ionicons name="camera-reverse-outline" size={16} color={theme.text} />
                 <Text style={[styles.replacePhotoText, { color: theme.text }]}>
-                  🔄 Замінити фото
+                  Замінити фото
                 </Text>
               </Pressable>
             </View>
@@ -118,7 +124,7 @@ export default function JournalEntryScreen({ route, navigation }: Props) {
               style={[styles.addPhoto, { backgroundColor: theme.surface, borderColor: theme.border }]}
               onPress={() => navigation.navigate('Camera')}
             >
-              <Text style={styles.addPhotoEmoji}>📷</Text>
+              <Ionicons name="camera-outline" size={40} color={theme.textMuted} />
               <Text style={[styles.addPhotoText, { color: theme.textMuted }]}>
                 Зробити фото
               </Text>
@@ -207,6 +213,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: spacing.sm,
     right: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 8,
@@ -225,7 +234,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.xs,
   },
-  addPhotoEmoji: { fontSize: 36 },
   addPhotoText: { fontSize: typography.size.md },
   fields: {
     padding: spacing.md,

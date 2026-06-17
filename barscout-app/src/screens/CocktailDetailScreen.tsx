@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 import { spacing, typography, useTheme } from '@/theme';
 import { getById } from '@/services/cocktailApi';
 import type { Cocktail } from '@/types/cocktail';
@@ -51,7 +52,7 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
                   })
                 }
               >
-                <Text style={{ fontSize: 20 }}>📤</Text>
+                <Ionicons name="share-outline" size={22} color={theme.text} />
               </Pressable>
               <Pressable
                 hitSlop={12}
@@ -60,13 +61,13 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
                   haptics.light();
                 }}
               >
-                <Text style={{ fontSize: 22 }}>{fav ? '❤️' : '🤍'}</Text>
+                <Ionicons name={fav ? 'heart' : 'heart-outline'} size={24} color={fav ? theme.error : theme.text} />
               </Pressable>
             </View>
           )
         : undefined,
     });
-  }, [fav, cocktail]);
+  }, [fav, cocktail, theme.text, theme.error]);
 
   useEffect(() => {
     let cancelled = false;
@@ -163,8 +164,9 @@ export default function CocktailDetailScreen({ route, navigation }: Props) {
               });
             }}
           >
+            <Ionicons name="bookmark-outline" size={18} color={theme.text} />
             <Text style={[styles.actionButtonText, { color: theme.text }]}>
-              💾 Save to Journal
+              Save to Journal
             </Text>
           </Pressable>
         </View>
@@ -242,11 +244,14 @@ const styles = StyleSheet.create({
     lineHeight: typography.size.md * 1.6,
   },
   actionButton: {
+    flexDirection: 'row',
+    gap: 8,
     marginTop: spacing.sm,
     padding: spacing.md,
     borderRadius: 12,
     borderWidth: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   actionButtonText: {
     fontSize: typography.size.md,
